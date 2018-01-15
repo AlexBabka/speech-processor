@@ -18,7 +18,7 @@ public class RestClient {
     }
 
     private static final String HOST = "https://api.aigent.co/assessments/nouns-and-verbs/";
-    private static final String TEAM_NAME = "team3";
+    private static final String TEAM_NAME = "team3/";
     private static final String FILENAME_PLACEHOLDER = "{filename}";
     private static final String NOUNS_URL = HOST + "nouns/" + FILENAME_PLACEHOLDER + "/" + TEAM_NAME;
     private static final String VERBS_URL = HOST + "verbs/" + FILENAME_PLACEHOLDER + "/" + TEAM_NAME;
