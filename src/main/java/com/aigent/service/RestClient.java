@@ -1,5 +1,7 @@
 package com.aigent.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -9,6 +11,7 @@ import java.net.URL;
 
 @Component
 public class RestClient {
+    private static final Logger LOG = LoggerFactory.getLogger(RestClient.class);
 
     public static class Response {
         public int responseCode;
@@ -40,8 +43,14 @@ public class RestClient {
 
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
+        connection.addRequestProperty("content-type", "application/json");
+
         final DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-        outputStream.writeBytes("{[" + mkString(values, ',') + "]}");
+        String payload = "[\"" + String.join("\",\"", values) + "\"]";
+
+        LOG.info(payload);
+
+        outputStream.writeBytes(payload);
         final int responseCode = connection.getResponseCode();
 
         InputStream inputStream;
