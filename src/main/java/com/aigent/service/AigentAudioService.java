@@ -13,7 +13,8 @@ public class AigentAudioService {
 			final String str[] = {"a", "b"};
 			final RestClient.Response response = restClient.callVerbsUrl("test", str);
 
-			System.out.println(response.responseCode + " : " + response.response);
+			System.out.println("ResponseCode: " + response.responseCode);
+			System.out.println("ResponseContent: " + response.response);
 
 		} catch (IOException exception) {
 			System.out.println("Exception: " + exception.getMessage());
