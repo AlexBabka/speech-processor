@@ -1,13 +1,11 @@
 package com.aigent.service.words_processing;
 
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
-import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.InputStream;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import opennlp.tools.cmdline.parser.ParserTool;
@@ -18,56 +16,61 @@ import opennlp.tools.parser.ParserModel;
 
 public class WordsProcessing {
 
-    static Set<String> nounPhrases = new HashSet<>();
+    public static class Response {
+        public List<String> nounList = new ArrayList<>();
+        public List<String> verbList = new ArrayList<>();
+    }
 
-    public void process() {
+    public Response process(final List<String> chunkOfText) {
+        final Response response = new Response();
 
-        InputStream modelInParse = null;
+        for (final String item : chunkOfText) {
+            processString(item, response);
+        }
+
+        return response;
+    }
+
+    private void processString(final String string, final Response response) {
         try {
             //load chunking model
-            modelInParse = new FileInputStream("en-parser-chunking.bin"); //from http://opennlp.sourceforge.net/models-1.5/
-            ParserModel model = new ParserModel(modelInParse);
+            final InputStream stringInputStream = new ByteArrayInputStream(string.getBytes());
+            ParserModel model = new ParserModel(stringInputStream);
 
             //create parse tree
             Parser parser = ParserFactory.create(model);
 
             //Name of the file to read. file
-            while (true) {
-                if (file.toString() == null | file.toStrinig() == '')
-                    break;
-
-                List<String> document = readFile(file);
-                for (Strinig line : document) {
-                    Parse topParses[] = ParserTool.parseLine(sentence, parser, 1);
-                    //call subroutine to extract noun phrases
-                    for (Parse p : topParses) {
-                        getNounPhrases(p);
-                        WriteToFile(new ArrayList<String>(nounPhrases));
-                    }
-                }
+            final Parse topParses[] = ParserTool.parseLine(string, parser, 1);
+            //call subroutine to extract noun phrases
+            for (final Parse p : topParses) {
+                response.nounList.add(getNounPhrases(p));
+                response.verbList.add(getVerbPhrases(p));
+                //     WriteToFile(new ArrayList<String>(nounPhrases));
+                //   WriteToFile(new ArrayList<String>(verbPhrases));
             }
-		catch(IOException e){
-                e.printStackTrace();
-            }
-		finally{
-                if (modelInParse != null) {
-                    try {
-                        modelInParse.close();
-                    } catch (IOException e) {
-                    }
-                }
-            }
+        } catch (final IOException e) {
+            e.printStackTrace();
         }
     }
 
-    public void getNounPhrases(Parse p) {
-
-        if (p.getType().equals("NP")) { //NP=noun phrase
-            nounPhrases.add(p.getCoveredText());
+    private String getNounPhrases(final Parse p) {
+        if (p.getType().equals("NN") || p.getType().equals("NNS") ||  p.getType().equals("NNP") || p.getType().equals("NNPS")) {
+            return p.getCoveredText();
+        } else {
+            return null;
         }
     }
 
-    private void WriteToFile(List<String> content){
+    private String getVerbPhrases(final Parse p) {
+        if (p.getType().equals("JJ") || p.getType().equals("JJR") || p.getType().equals("JJS")) {
+            return p.getCoveredText();
+        } else {
+            return null;
+        }
+    }
+
+    /*private void WriteToFile(List<String> content){
 
         String FILENAME = "E:\\test\\filename.txt";
 
@@ -126,6 +129,6 @@ public class WordsProcessing {
             e.printStackTrace();
             return null;
         }
-    }
+    }*/
 
 }
