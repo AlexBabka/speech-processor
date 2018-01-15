@@ -1,24 +1,30 @@
 package com.aigent.service;
 
-import java.io.IOException;
+import com.aigent.service.speech.SpeechProcessor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-public class AigentAudioService {
+import java.util.List;
 
-	public static void main(final String[] args) {
+@SpringBootApplication
+public class AigentAudioService implements CommandLineRunner {
+    @Autowired
+    private SpeechProcessor speechProcessor;
+    @Autowired
+    private RestClient restClient;
 
-		final RestClient restClient = new RestClient();
+    public static void main(String[] args) {
+        SpringApplication.run(AigentAudioService.class, args);
+    }
 
-		try {
+    @Override
+    public void run(String... strings) throws Exception {
+        String fileName = "130106-09-05-16-removed-private-information.wav";
+        List<String> recognizedSpeech = speechProcessor.recognizeSpeech(fileName);
 
-			final String str[] = {"a", "b"};
-			final RestClient.Response response = restClient.callVerbsUrl("test", str);
+        restClient.callNounsUrl(fileName, (String[]) recognizedSpeech.toArray());
+    }
 
-			System.out.println("ResponseCode: " + response.responseCode);
-			System.out.println("ResponseContent: " + response.response);
-
-		} catch (IOException exception) {
-			System.out.println("Exception: " + exception.getMessage());
-			exception.printStackTrace();
-		}
-	}
 }

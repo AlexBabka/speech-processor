@@ -1,10 +1,13 @@
 package com.aigent.service;
 
+import org.springframework.stereotype.Component;
+
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+@Component
 public class RestClient {
 
     public static class Response {
