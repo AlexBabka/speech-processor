@@ -16,7 +16,8 @@ public class AigentAudioService {
 			System.out.println(response.responseCode + " : " + response.response);
 
 		} catch (IOException exception) {
-			System.out.println(exception.getMessage());
+			System.out.println("Exception: " + exception.getMessage());
+			exception.printStackTrace();
 		}
 	}
 }

@@ -1,10 +1,8 @@
 package com.aigent.service;
 
 import javax.net.ssl.HttpsURLConnection;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.HttpURLConnection;
 import java.net.URL;
 
 public class RestClient {
@@ -19,7 +17,7 @@ public class RestClient {
         }
     }
 
-    private static final String HOST = "https://api.agent.co/assessments/nouns-and-verbs/";
+    private static final String HOST = "https://api.aigent.co/assessments/nouns-and-verbs/";
     private static final String TEAM_NAME = "team3";
     private static final String FILENAME_PLACEHOLDER = "{filename}";
     private static final String NOUNS_URL = HOST + "nouns/" + FILENAME_PLACEHOLDER + "/" + TEAM_NAME;
@@ -43,7 +41,14 @@ public class RestClient {
         outputStream.writeBytes(mkString(values, ','));
         final int responseCode = connection.getResponseCode();
 
-        final BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
+        InputStream inputStream;
+        if (responseCode != HttpURLConnection.HTTP_OK) {
+            inputStream = connection.getErrorStream();
+        } else {
+            inputStream = connection.getInputStream();
+        }
+
+        final BufferedReader in = new BufferedReader(new InputStreamReader(inputStream));
         final StringBuffer response = new StringBuffer();
 
         String inputLine;
