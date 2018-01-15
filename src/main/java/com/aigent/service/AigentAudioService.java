@@ -8,7 +8,9 @@ import org.springframework.scheduling.annotation.EnableAsync;
 @EnableAsync
 public class AigentAudioService {
 
-	public static void main(String[] args) {
-			 SpringApplication app = new SpringApplication(AigentAudioService.class);
-		}
+	public static void main(final String[] args) {
+
+		
+
+	}
 }
