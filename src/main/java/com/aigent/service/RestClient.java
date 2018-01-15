@@ -41,7 +41,7 @@ public class RestClient {
         connection.setRequestMethod("POST");
         connection.setDoOutput(true);
         final DataOutputStream outputStream = new DataOutputStream(connection.getOutputStream());
-        outputStream.writeBytes(mkString(values, ','));
+        outputStream.writeBytes("{[" + mkString(values, ',') + "]}");
         final int responseCode = connection.getResponseCode();
 
         InputStream inputStream;
