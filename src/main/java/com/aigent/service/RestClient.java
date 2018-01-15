@@ -1,7 +1,5 @@
 package com.aigent.service;
 
-import sun.net.www.protocol.https.HttpsURLConnectionImpl;
-
 import javax.net.ssl.HttpsURLConnection;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -23,16 +21,16 @@ public class RestClient {
 
     private static final String HOST = "https://api.agent.co/assessments/nouns-and-verbs/";
     private static final String TEAM_NAME = "team3";
-    private static final String FILENAME_PLACEHOLDER = "{filename}"
+    private static final String FILENAME_PLACEHOLDER = "{filename}";
     private static final String NOUNS_URL = HOST + "nouns/" + FILENAME_PLACEHOLDER + "/" + TEAM_NAME;
     private static final String VERBS_URL = HOST + "verbs/" + FILENAME_PLACEHOLDER + "/" + TEAM_NAME;
 
     public Response callVerbsUrl(String filename, String verbs[]) throws IOException {
-        callUrl(VERBS_URL.replace(FILENAME_PLACEHOLDER, filename), verbs);
+        return callUrl(VERBS_URL.replace(FILENAME_PLACEHOLDER, filename), verbs);
     }
 
     public Response callNounsUrl(String filename, String nouns[]) throws IOException {
-        callUrl(NOUNS_URL.replace(FILENAME_PLACEHOLDER, filename), nouns);
+        return callUrl(NOUNS_URL.replace(FILENAME_PLACEHOLDER, filename), nouns);
     }
 
     private Response callUrl(final String urlString, final String values[]) throws IOException {
